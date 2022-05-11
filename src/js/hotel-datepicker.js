@@ -21,6 +21,7 @@ export default class HotelDatepicker {
 		this.maxNights = opts.maxNights || 0;
 		this.selectForward = opts.selectForward || false;
 		this.disabledDates = opts.disabledDates || [];
+		this.minPriceDates = opts.minPriceDates || [];  // Bernd for KH
 		this.noCheckInDates = opts.noCheckInDates || [];
 		this.noCheckOutDates = opts.noCheckOutDates || [];
 		this.disabledDaysOfWeek = opts.disabledDaysOfWeek || [];
@@ -420,6 +421,7 @@ export default class HotelDatepicker {
 					type: 'lastMonth',
 					day: _day.getDate(),
 					time: _day.getTime(),
+					
 					valid
 				});
 			}
@@ -435,9 +437,15 @@ export default class HotelDatepicker {
             // Check if the day is valid. And pass this property to the days object
 			valid = this.isValidDate(_day.getTime());
 
+			// add the price to the day from minPriceDates
+			var price = this.getDayPrice(_day.getTime());
+
 			if ((this.startDate && this.compareDay(_day, this.startDate) < 0) || (this.endDate && this.compareDay(_day, this.endDate) > 0)) {
 				valid = false;
 			}
+
+			// add the price to the day from minPriceDates
+			var price = this.getDayPrice(_day.getTime());
 
             // We pass the type property to know if the day is part of the
             // current month or part of the next month
@@ -446,9 +454,11 @@ export default class HotelDatepicker {
 				type: _day.getMonth() === currentMonth ? 'visibleMonth' : 'nextMonth',
 				day: _day.getDate(),
 				time: _day.getTime(),
+				price: price,
 				valid
 			});
 		}
+
 
         // Create the week rows.
 		for (let week = 0; week < 6; week++) {
@@ -585,7 +595,7 @@ export default class HotelDatepicker {
 				}
 
                 // Create the day HTML
-				html += '<td class="datepicker__month-day ' + dayAttributes.class + '" ' + this.printAttributes(dayAttributes) + '>' + _day.day + '</td>';
+				html += '<td class="datepicker__month-day ' + dayAttributes.class + '" ' + this.printAttributes(dayAttributes) + '>' + _day.day + ' <br>' + _day.price + '</td>';
 			}
 
 			html += '</tr>';
@@ -825,7 +835,6 @@ export default class HotelDatepicker {
 				this.setValue(dateRangeValue, this.getDateString(new Date(this.start)), this.getDateString(new Date(this.end)));
 				this.changed = true;
 			}
-
 			return;
 		}
 
@@ -944,6 +953,12 @@ export default class HotelDatepicker {
 		if (this.end && this.onSelectRange) {
 			this.onSelectRange();
 		}
+	}
+	getDayPrice(date, format = this.format) {
+		var obj = this.minPriceDates.find(o => o.date === fecha.format(date, format));
+		if (obj) {
+			return obj.price 
+		} else {return '' }
 	}
 
 	isValidDate(time) {

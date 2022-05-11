@@ -3,15 +3,15 @@
   "version": "4.0.3",
   "author": "Benito Lopez (http://lopezb.com)",
   "license": "MIT",
-  "description": "Date range picker for hotels",
+  "description": "Date range picker for hotels with prices",
   "repository": {
     "type": "git",
-    "url": "https://github.com/benitolopez/hotel-datepicker.git"
+    "url": "https://github.com/issibi/hotel-datepicker.git"
   },
   "bugs": {
-    "url": "https://github.com/benitolopez/hotel-datepicker/issues"
+    "url": "https://github.com/issibi/hotel-datepicker/issues"
   },
-  "homepage": "https://github.com/benitolopez/hotel-datepicker",
+  "homepage": "https://github.com/issibi/hotel-datepicker",
   "keywords": [
     "datepicker",
     "calendar",
